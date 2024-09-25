@@ -1,0 +1,23 @@
+Pickup Info
+Request URL:
+https://www.tinytown.in/variants/44435832406201/?section_id=pickup-availability
+Request Method:
+GET
+Status Code:
+304 Not Modified
+Remote Address:
+23.227.38.74:443
+Referrer Policy:
+strict-origin-when-cross-origin
+
+Recommendations:
+Request URL:
+https://www.tinytown.in/recommendations/products?section_id=template--16293238374585__related-products&product_id=7968303186105&limit=4
+Request Method:
+GET
+Status Code:
+304 Not Modified
+Remote Address:
+23.227.38.74:443
+Referrer Policy:
+strict-origin-when-cross-origin
