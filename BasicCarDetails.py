@@ -1,13 +1,19 @@
 import requests
 from bs4 import BeautifulSoup
 import psycopg2
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+db_password = os.getenv('DB_PASSWORD')
 
 def getCarDetails(baseUrl,pageNumber):
 
     conn = psycopg2.connect(
-        dbname='your_database_name',
-        user='your_username',
-        password='your_password',
+        dbname='ToysData',
+        user='postgres',
+        password=db_password,
         host='localhost',  
         port='5432'   
     )
@@ -19,7 +25,7 @@ def getCarDetails(baseUrl,pageNumber):
     '''
         
     for i in range(1,pageNumber+1):
-        url = f'{base_url}/collections/all?page={i}'
+        url = f'{baseUrl}/collections/all?page={i}'
         print('getting data for: ', url)   
         response = requests.get(url)
         if response.status_code == 200:
@@ -45,7 +51,6 @@ def getCarDetails(baseUrl,pageNumber):
 
                     salePrice = cars.find('span', class_='price-item price-item--sale price-item--last')
                     # print('salePrice: ',salePrice.text)
-
 
                     # finalData[f'Car: {titles.text.strip()}'] = {
                     #     'titles': titles.text.strip(),

@@ -1,15 +1,21 @@
 import requests
 from bs4 import BeautifulSoup
 import psycopg2
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+db_password = os.getenv('DB_PASSWORD')
 
 def getProductRecommendations(url):
 
     conn = psycopg2.connect(
-        dbname="your_database_name",
-        user="your_username",
-        password="your_password",
-        host="localhost", 
-        port="5432" 
+        dbname='ToysData',
+        user='postgres',
+        password=db_password,
+        host='localhost',  
+        port='5432'   
     )
     cursor = conn.cursor()
 
