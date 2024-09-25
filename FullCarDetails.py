@@ -22,10 +22,23 @@ def getCarFullDetails(url):
     # Insert data query
     insert_query = '''
         INSERT INTO products (title, link, vendor, regular_price, sale_price, 
-        pickup_available_at, pickup_availability, address, description) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        pickup_available_at, pickup_availability, description) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     '''
-    
+
+    create_table_query = """
+        CREATE TABLE IF NOT EXISTS full_car_details (
+            id SERIAL PRIMARY KEY,
+            title TEXT,
+            link TEXT,
+            vendor TEXT,
+            regular_price TEXT,
+            sale_price TEXT
+        );
+    """
+    cursor.execute(create_table_query)
+    print('created table')
+
     response = requests.get(url)
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -47,19 +60,20 @@ def getCarFullDetails(url):
         pickUpInfo = product_info.find('pickup-availability-drawer', class_='gradient')
         print('pickUpInfo: ',pickUpInfo)
 
-        if pickUpInfo:
-            print('getting pickup info')
-            pickUpAvailableAt = pickUpInfo.find('h3', class_='h4')
-            print('pickUp: ',pickUpAvailableAt.text)
+        # uses shopify's custom tag 
+        # if pickUpInfo:
+        #     print('getting pickup info')
+        #     pickUpAvailableAt = pickUpInfo.find('h3', class_='h4')
+        #     print('pickUp: ',pickUpAvailableAt.text)
 
-            pickUpAvailablity = pickUpInfo.find('p', class_='pickup-availability-preview caption-large')
-            print('pickUp: ',pickUpAvailablity.text)
+        #     pickUpAvailablity = pickUpInfo.find('p', class_='pickup-availability-preview caption-large')
+        #     print('pickUp: ',pickUpAvailablity.text)
 
-            address_tag = soup.find('address', class_='pickup-availability-address')
-            if address_tag:
-                print('getting address info')
-                address = address_tag.get_text('p', strip=True)
-                print('address: ',address.text)
+        #     address_tag = soup.find('address', class_='pickup-availability-address')
+        #     if address_tag:
+        #         print('getting address info')
+        #         address = address_tag.get_text('p', strip=True)
+        #         print('address: ',address.text)
 
         product_description_div = soup.find('div', class_='product__description')
 
@@ -73,13 +87,11 @@ def getCarFullDetails(url):
                 vendor.text.strip(),
                 regularPrice.text.strip(),
                 salePrice.text.strip(),
-                address,
                 product_description
             ))
 
-        # Commit the transaction
         conn.commit()
-    
+        print("Data inserted successfully!")    
     cursor.close()
     conn.close()
 getCarFullDetails("https://tinytown.in/products/hot-wheels-donut-drifter-blue")

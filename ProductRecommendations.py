@@ -19,6 +19,17 @@ def getProductRecommendations(url):
     )
     cursor = conn.cursor()
 
+    create_table_query = """
+    CREATE TABLE IF NOT EXISTS product_recommendations (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        link TEXT NOT NULL,
+        regular_price TEXT,
+        sale_price TEXT
+    );
+    """
+    cursor.execute(create_table_query)
+    print('created table')
     # copied from browser network tab if required
     # headers = {
     #     'accept': '*/*',

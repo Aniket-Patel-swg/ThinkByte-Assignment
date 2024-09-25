@@ -23,6 +23,20 @@ def getCarDetails(baseUrl,pageNumber):
         INSERT INTO cars (title, link, vendor, regular_price, sale_price) 
         VALUES (%s, %s, %s, %s, %s)
     '''
+
+    create_table_query = """
+        CREATE TABLE IF NOT EXISTS cars (
+            id SERIAL PRIMARY KEY,
+            title TEXT,
+            link TEXT,
+            vendor TEXT,
+            regular_price TEXT,
+            sale_price TEXT
+        );
+    """
+    cursor.execute(create_table_query)
+
+    print('created table')
         
     for i in range(1,pageNumber+1):
         url = f'{baseUrl}/collections/all?page={i}'
@@ -69,8 +83,8 @@ def getCarDetails(baseUrl,pageNumber):
                     regular_price_text = regularPrice.text.strip()
                     sale_price_text = salePrice.text.strip()
                     cursor.execute(insert_query, (title_text, link_text, vendor_text, regular_price_text, sale_price_text))
-
             conn.commit()
+            print("Data inserted successfully!")
     cursor.close()
     conn.close()
 base_url = 'https://www.tinytown.in'
